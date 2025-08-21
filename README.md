@@ -51,13 +51,3 @@ Para executar o projeto em seu ambiente de desenvolvimento, siga os passos abaix
     ```bash
     npm run dev
     ```
-
-A aplicação estará disponível em `http://localhost:5173` (ou outra porta indicada no terminal).
-
----
-
-## 🎨 Estrutura e Decisões de Design
-
-A arquitetura do frontend foi pensada para ser modular e escalável. Os componentes são divididos por responsabilidade (`components`, `pages`, `layouts`), os serviços de API são centralizados (`services/api.js`) e os tipos do TypeScript são compartilhados, garantindo consistência em toda a aplicação.
-
-A escolha pelo **Tailwind CSS** permitiu a construção de uma UI customizada sem a verbosidade do CSS tradicional, enquanto o **Zod** foi essencial para criar um "contrato" de dados entre o formulário e a API, tornando a aplicação mais robusta e confiável.
