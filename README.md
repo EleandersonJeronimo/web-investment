@@ -1,69 +1,63 @@
-# React + TypeScript + Vite
+## ✨ Funcionalidades Principais
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+* **Cadastro de Novos Investimentos:** Um formulário completo e intuitivo para adicionar novos ativos, com campos para nome, valor, tipo e data.
+* **Validação de Dados em Tempo Real:** Utilização da biblioteca Zod para validar os dados do formulário antes do envio, garantindo a integridade das informações e fornecendo feedback instantâneo ao usuário.
+* **Listagem e Visualização de Ativos:** Uma tela principal que exibe todos os investimentos já cadastrados em um layout claro e organizado.
+* **Feedback de Sucesso:** Após o cadastro de um novo investimento, o usuário é redirecionado para uma tela de confirmação, melhorando a usabilidade e a comunicação da interface.
+* **Comunicação com API:** Integração robusta com o backend através do cliente HTTP Axios para realizar operações de `GET` e `POST`.
 
-Currently, two official plugins are available:
+---
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+## 🚀 Tecnologias e Ferramentas
 
-## Expanding the ESLint configuration
+Este projeto foi desenvolvido utilizando as tecnologias mais modernas do ecossistema Frontend, com foco em performance, escalabilidade e boas práticas de desenvolvimento.
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+* **React:** Biblioteca principal para a construção da interface de usuário de forma componentizada e declarativa.
+* **TypeScript:** Adiciona tipagem estática ao JavaScript, aumentando a segurança do código, facilitando a manutenção e prevenindo bugs em tempo de desenvolvimento.
+* **Tailwind CSS:** Framework CSS utility-first para a criação de designs customizados de forma rápida e eficiente, sem a necessidade de sair do HTML.
+* **Zod:** Biblioteca de validação de esquemas que garante que os dados inseridos pelo usuário (e recebidos da API) estejam no formato correto, integrada com o React Hook Form para uma gestão de formulários poderosa.
+* **Axios:** Cliente HTTP baseado em Promises para realizar as requisições à API de forma simples e organizada.
+* **React Router DOM:** Para a gestão das rotas da aplicação (navegação entre telas).
+* **Vite:** Ferramenta de build extremamente rápida que oferece um ambiente de desenvolvimento ágil e otimizado.
 
-```js
-export default tseslint.config([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+---
 
-      // Remove tseslint.configs.recommended and replace with this
-      ...tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      ...tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      ...tseslint.configs.stylisticTypeChecked,
+## 🔧 Rodando o Projeto Localmente
 
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
+Para executar o projeto em seu ambiente de desenvolvimento, siga os passos abaixo.
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+**Pré-requisitos:**
+* Node.js (versão 18 ou superior)
+* npm ou Yarn
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+**Passos:**
 
-export default tseslint.config([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
+1.  **Clone o repositório:**
+    ```bash
+    git clone [https://github.com/seu-usuario/nome-do-repositorio.git](https://github.com/seu-usuario/nome-do-repositorio.git)
+    ```
+
+2.  **Acesse o diretório do projeto:**
+    ```bash
+    cd nome-do-repositorio
+    ```
+
+3.  **Instale as dependências:**
+    ```bash
+    npm install
+    ```
+
+4.  **Inicie o servidor de desenvolvimento:**
+    ```bash
+    npm run dev
+    ```
+
+A aplicação estará disponível em `http://localhost:5173` (ou outra porta indicada no terminal).
+
+---
+
+## 🎨 Estrutura e Decisões de Design
+
+A arquitetura do frontend foi pensada para ser modular e escalável. Os componentes são divididos por responsabilidade (`components`, `pages`, `layouts`), os serviços de API são centralizados (`services/api.js`) e os tipos do TypeScript são compartilhados, garantindo consistência em toda a aplicação.
+
+A escolha pelo **Tailwind CSS** permitiu a construção de uma UI customizada sem a verbosidade do CSS tradicional, enquanto o **Zod** foi essencial para criar um "contrato" de dados entre o formulário e a API, tornando a aplicação mais robusta e confiável.
