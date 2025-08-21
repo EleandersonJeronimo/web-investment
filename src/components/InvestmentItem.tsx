@@ -1,9 +1,8 @@
 export type InvestmentItemProps = {
 	id: string;
 	name: string;
-	amount: string;
+	amount: number;
 	category: string;
-	categoryIcon: string;
 };
 
 type Props = React.ComponentProps<"a"> & {

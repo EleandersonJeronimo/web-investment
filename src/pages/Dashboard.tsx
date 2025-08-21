@@ -1,30 +1,38 @@
 import { Button } from "../components/Button";
 import { Input } from "../components/Input";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import SearchSvg from "../assets/icon/search.svg";
 import { InvestmentItem } from "../components/InvestmentItem";
 import { type InvestmentItemProps } from "../components/InvestmentItem";
 import { CATEGORIES } from "../components/utils/categories";
 import { Pagination } from "../components/Pagination";
+import {api} from "../services/api"
+import { AxiosError } from "axios";
 
-const INVESTMENT_EXAMPLE = {
-	id: "123",
-	name: "teste",
-	amount: "123,89",
-	category: "Fundo",
-	categoryIcon: CATEGORIES["fundo"].icon,
-};
+const PER_PAGE = 3
 
 export function Dashboard() {
 	const [name, setName] = useState("");
 	const [page, setPage] = useState(1);
-	const [totalOfPage, setTotalOfPage] = useState(10);
-	const [investments, setInvestment] = useState<InvestmentItemProps[]>([
-		INVESTMENT_EXAMPLE,
-	]);
+	const [totalOfPage, setTotalOfPage] = useState(0);
+	const [investments, setInvestments] = useState<InvestmentItemProps[]>([]);
 
-	function fetchInvestment(e: React.FormEvent) {
+	async function fetchInvestment() {
+		const response = await api.get<InvestmentPaginationAPIresponse>(`/investments?name=${name.trim()}&page=${page}&perPage=${PER_PAGE}`);
+
+		setInvestments(response.data.investments.map((investment) => ({
+			id: investment.id,
+			name: investment.name,
+			amount: investment.amount,
+			category: investment.category
+		})))
+
+		setTotalOfPage(response.data.pagination.totalPages)
+	}
+
+	function onSubmit(e: React.FormEvent) {
 		e.preventDefault();
+		fetchInvestment()
 	}
 
 	function handlePagination(action: "next" | "previous") {
@@ -41,12 +49,18 @@ export function Dashboard() {
 		});
 	}
 
+	
+
+	useEffect(() => {
+		fetchInvestment()
+	}, [page])
+
 	return (
 		<div className="bg-gray-500 rounded-xl p-10 md:min-w-[768px]">
 			<h1 className="text-gray-100 font-bold text-xl flex-1">Investimentos</h1>
 
 			<form
-				onSubmit={fetchInvestment}
+				onSubmit={onSubmit}
 				className="flex flex-1 items-center justify-between pb-6 border-b-[1px] border-b-gray-400 md:flex-row gap-2 mt-6"
 			>
 				<Input

@@ -2,8 +2,21 @@ import { Button } from "../components/Button";
 import { Input } from "../components/Input";
 import { Select } from "../components/Select";
 import { CATEGORIES, CATEGORIES_KEYS } from "../components/utils/categories";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router";
+import { z, ZodError } from "zod";
+import { api } from "../services/api";
+import { AxiosError } from "axios";
+
+const investmentSchema = z.object({
+	name: z.string().min(2, "O título é obrigatório"),
+	amount: z.coerce
+		.number({ message: "Informe um valor válido" })
+		.positive({ message: "O valor deve ser positivo" }),
+	category: z.enum(CATEGORIES_KEYS, {
+		message: "Selecione uma categoria válida",
+	}),
+});
 
 export function Investment() {
 	const [name, setName] = useState("");
@@ -12,13 +25,66 @@ export function Investment() {
 	const [isLoading, setIsLoading] = useState(false);
 
 	const navigate = useNavigate();
-	const params = useParams<{id: string}>()
+	const params = useParams<{ id: string }>();
 
-	function onSubmit(e: React.FormEvent) {
+	async function onSubmit(e: React.FormEvent) {
 		e.preventDefault();
 
-		navigate("/confirm", { state: { fromSubmit: true } });
+		if (params.id) {
+			return navigate(-1);
+		}
+
+		try {
+			const data = investmentSchema.parse({
+				name,
+				amount: amount.replace(",", "."),
+				category,
+			});
+
+			await api.post("/investments", { ...data });
+
+			navigate("/confirm", { state: { fromSubmit: true } });
+		} catch (error) {
+			console.log(error);
+
+			if (error instanceof ZodError) {
+				return alert(error.issues[0].message);
+			}
+
+			if (error instanceof AxiosError) {
+				return alert(error.response?.data.message);
+			}
+
+			alert(
+				"Não foi possivel realizacao sua operação, tente novamente mais tarde.",
+			);
+		}
 	}
+
+	async function fetchInvestment(id: string) {
+		try {
+			const response = await api.get<InvestmentAPIResponse>(
+				`/investments/${id}`,
+			);
+			setName(response.data.name);
+			setCategory(response.data.category);
+			setAmount(response.data.amount.toString());
+		} catch (error) {
+			console.log(error);
+
+			if (error instanceof AxiosError) {
+				return alert(error.response?.data.message);
+			}
+
+			alert("Não foi possivel carregar");
+		}
+	}
+
+	useEffect(() => {
+		if (params.id) {
+			fetchInvestment(params.id);
+		}
+	}, [params.id]);
 
 	return (
 		<form
@@ -36,6 +102,7 @@ export function Investment() {
 				required
 				legend="Título"
 				value={name}
+				disabled={!params.id}
 				onChange={(e) => setName(e.target.value)}
 			/>
 			<div className="flex gap-4">
@@ -43,6 +110,7 @@ export function Investment() {
 					required
 					legend="Tipo do investimento"
 					value={category}
+					disabled={!params.id}
 					onChange={(e) => setCategory(e.target.value)}
 				>
 					{CATEGORIES_KEYS.map((category) => (
@@ -55,16 +123,19 @@ export function Investment() {
 				<Input
 					legend="valor"
 					required
+					disabled={!params.id}
 					value={amount}
 					onChange={(e) => setAmount(e.target.value)}
 				/>
 			</div>
 
 			<Button type="submit" isLoading={isLoading}>
-				{ params.id ? 'Voltar' : 'Enviar' }
+				{params.id ? "Voltar" : "Enviar"}
 			</Button>
 			<div>
-				<a href="/dashboard">Ir para a lista de investimentos</a>
+				<a href="/dashboard" className="underline">
+					Ir para a lista de investimentos
+				</a>
 			</div>
 		</form>
 	);

@@ -6,7 +6,9 @@ export function Header() {
 			<h1 className="my-8">GF Innovation</h1>
 
 			<div className="flex items-center gap-3">
-				<span className="text-sm font-semibold text-gray-200">Bem-Vindo</span>
+				<a href="/" className="text-sm font-semibold text-gray-200">
+					Voltar para inicio
+				</a>
 				<img
 					src={logout}
 					alt="logout"
